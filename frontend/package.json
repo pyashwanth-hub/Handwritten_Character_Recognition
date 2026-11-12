@@ -1,0 +1,20 @@
+{
+  "name": "handwritten-character-recognition-frontend",
+  "version": "1.0.0",
+  "description": "Futuristic AI Handwritten Character Recognition Web Frontend",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 3000",
+    "dev": "python -m http.server 3000"
+  },
+  "keywords": [
+    "deep-learning",
+    "handwriting-recognition",
+    "cnn",
+    "ocr",
+    "glassmorphism",
+    "canvas"
+  ],
+  "author": "Deep Learning AI Developer",
+  "license": "MIT"
+}

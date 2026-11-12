@@ -1,0 +1,21 @@
+{
+  version: 0.2.0,
+  configurations: [
+    {
+      name: ?? Run AI Backend (Flask),
+      type: python,
+      request: launch,
+      program: /backend/app.py,
+      console: integratedTerminal,
+      cwd: /backend
+    },
+    {
+      name: ?? Run Model Test Suite,
+      type: python,
+      request: launch,
+      program: /backend/test_backend.py,
+      console: integratedTerminal,
+      cwd: /backend
+    }
+  ]
+}

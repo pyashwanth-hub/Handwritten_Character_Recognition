@@ -1,0 +1,33 @@
+{
+  version: 2.0.0,
+  tasks: [
+    {
+      label: ? Start Fullstack (Frontend + Backend),
+      type: shell,
+      command: /run_fullstack.bat,
+      problemMatcher: [],
+      group: {
+        kind: build,
+        isDefault: true
+      }
+    },
+    {
+      label: ?? Start Backend Only (Port 5000),
+      type: shell,
+      command: python app.py,
+      options: {
+        cwd: /backend
+      },
+      problemMatcher: []
+    },
+    {
+      label: ?? Start Frontend Only (Port 3000),
+      type: shell,
+      command: python -m http.server 3000,
+      options: {
+        cwd: /frontend
+      },
+      problemMatcher: []
+    }
+  ]
+}

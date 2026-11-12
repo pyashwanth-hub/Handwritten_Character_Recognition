@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Handwritten Character Recognition | Deep Learning CNN</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+
+  <!-- Chart.js for Interactive Metrics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Static Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+  <!-- Floating Background Particles & Atmosphere Orbs -->
+  <canvas id="particle-canvas"></canvas>
+  <div class="gradient-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+
+  <!-- Confetti Celebration Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- ========================================================================
+       NAVIGATION BAR
+       ======================================================================== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#home" class="logo-brand">
+        <div class="logo-icon">✨</div>
+        <span>Neural<span class="text-gradient">Vision</span> AI</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#studio">Recognition Studio</a></li>
+        <li><a href="#models">AI Models</a></li>
+        <li><a href="#datasets">Datasets</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+      </ul>
+
+      <div class="nav-action">
+        <a href="#studio" class="btn btn-primary btn-sm shimmer-btn">
+          <span>🚀 Start Recognition</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================================================================
+       1. HOME / HERO SECTION
+       ======================================================================== -->
+  <section class="hero-section" id="home">
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Hero Left Content -->
+        <div class="hero-content">
+          <div class="section-badge">
+            <span class="dot"></span>
+            <span>Next-Gen Deep Learning OCR</span>
+          </div>
+
+          <h1 class="hero-title">
+            AI Handwritten <br>
+            <span class="text-gradient">Character Recognition</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            <span id="typewriter-text">Transform Your Handwriting into Digital Text with AI.</span>
+            <span class="typewriter-cursor">|</span>
+          </p>
+
+          <div class="hero-btn-group">
+            <a href="#studio" class="btn btn-primary btn-lg shimmer-btn">
+              <span>✍️ Start Recognition</span>
+            </a>
+            <a href="#models" class="btn btn-secondary btn-lg">
+              <span>🔮 Explore Models</span>
+            </a>
+            <a href="#how-it-works" class="btn btn-secondary btn-lg">
+              <span>💡 About Project</span>
+            </a>
+          </div>
+
+          <div class="hero-stats-row">
+            <div class="hero-stat">
+              <span class="stat-num">99.43%</span>
+              <span class="stat-label">CNN Accuracy</span>
+            </div>
+            <div class="hero-stat">
+              <span class="stat-num">36</span>
+              <span class="stat-label">Classes (0-9, A-Z)</span>
+            </div>
+            <div class="hero-stat">
+              <span class="stat-num">&lt; 5 ms</span>
+              <span class="stat-label">Inference Latency</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Right: Dynamic Neural Network Canvas -->
+        <div class="hero-visual">
+          <div class="neural-network-box">
+            <canvas id="brain-canvas"></canvas>
+
+            <div class="floating-badge badge-1">
+              <div class="badge-icon">⚡</div>
+              <div>
+                <div style="font-size:0.75rem; color:#94a3b8;">Primary DL Architecture</div>
+                <div style="font-weight:700; color:#fff;">Conv2D + MaxPool</div>
+              </div>
+            </div>
+
+            <div class="floating-badge badge-2">
+              <div class="badge-icon">🎯</div>
+              <div>
+                <div style="font-size:0.75rem; color:#94a3b8;">Real-Time Prediction</div>
+                <div style="font-weight:700; color:#fff;">Sub-5ms Softmax</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       2. CHARACTER RECOGNITION STUDIO
+       ======================================================================== -->
+  <section class="studio-section" id="studio">
+    <div class="container">
+      <div class="text-center reveal">
+        <div class="section-badge">
+          <span class="dot"></span>
+          <span>Interactive AI Studio</span>
+        </div>
+        <h2 class="section-title">AI Handwritten <span class="text-gradient">Recognition Studio</span></h2>
+        <p class="section-subtitle">Convert handwritten characters, words, complete sentences, and multi-line paragraphs into digital text using deep learning.</p>
+
+        <!-- Studio Mode Switcher -->
+        <div class="studio-mode-switcher">
+          <button class="mode-switch-btn active" id="btn-mode-sentence" data-mode="sentence">
+            <span>📝 Sentence &amp; Paragraph Recognition</span>
+            <span class="mode-pill-badge">CRNN Deep Learning</span>
+          </button>
+          <button class="mode-switch-btn" id="btn-mode-character" data-mode="character">
+            <span>🔤 Single Character Recognition</span>
+            <span class="mode-pill-badge">CNN / LeNet-5</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           SENTENCE & PARAGRAPH RECOGNITION STUDIO (CRNN)
+           ==================================================================== -->
+      <div id="sentence-studio-container" class="sentence-studio-container reveal">
+        <div class="studio-grid">
+          <!-- Left: Handwritten Sentence Input Panel -->
+          <div class="glass-card studio-card">
+            <div class="studio-tabs">
+              <button class="studio-tab-btn active sentence-tab-btn" data-sent-tab="draw">
+                <span>✍️ Draw Sentence</span>
+              </button>
+              <button class="studio-tab-btn sentence-tab-btn" data-sent-tab="upload">
+                <span>📁 Upload Sentence Image</span>
+              </button>
+            </div>
+
+            <!-- Tab 1: Draw Sentence Canvas -->
+            <div class="sentence-tab-pane active" id="sent-tab-draw">
+              <div class="sentence-canvas-wrapper">
+                <canvas id="sentence-canvas"></canvas>
+                <div class="canvas-hint" id="sentence-canvas-hint">Write a complete handwritten sentence or paragraph here...</div>
+                <div class="scanning-overlay" id="sentence-scanning-overlay"></div>
+              </div>
+
+              <!-- Sentence Canvas Toolbar -->
+              <div class="canvas-toolbar">
+                <div class="tool-group">
+                  <button class="tool-btn sent-tool-btn active" data-tool="brush" title="Pen Brush">✏️</button>
+                  <button class="tool-btn sent-tool-btn" data-tool="eraser" title="Eraser">🧹</button>
+                  <button class="tool-btn" id="sentence-undo-btn" title="Undo Stroke">↩️</button>
+                  <button class="tool-btn" id="sentence-clear-btn" title="Clear Canvas">🗑️</button>
+                </div>
+
+                <div class="brush-slider-box">
+                  <span>Stroke:</span>
+                  <input type="range" id="sentence-brush-slider" min="8" max="32" value="16">
+                  <span id="sentence-brush-val">16px</span>
+                </div>
+              </div>
+
+              <!-- Quick Sentence Sample Buttons -->
+              <div style="font-size:0.8rem; color:#94a3b8; margin: 0.6rem 0 0.4rem;">💡 Quick Sample Sentences:</div>
+              <div class="sentence-stamps-grid">
+                <button class="sentence-stamp-btn" data-sent="Machine learning is an interesting technology.">
+                  <span>✨ "Machine learning is an interesting technology."</span>
+                </button>
+                <button class="sentence-stamp-btn" data-sent="Deep learning models recognize handwritten characters.">
+                  <span>🧠 "Deep learning models recognize handwritten characters."</span>
+                </button>
+                <button class="sentence-stamp-btn" data-sent="Artificial intelligence transforms handwriting into digital text.">
+                  <span>🚀 "Artificial intelligence transforms handwriting into digital text."</span>
+                </button>
+                <button class="sentence-stamp-btn" data-sent="Machine learning is an interesting technology.&#10;Deep learning models recognize handwritten characters.">
+                  <span>📄 Multi-line Paragraph Test (2 Lines)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tab 2: Upload Sentence Image -->
+            <div class="sentence-tab-pane" id="sent-tab-upload" style="display: none;">
+              <div class="upload-dropzone" id="sentence-dropzone">
+                <input type="file" id="sentence-file-input" accept="image/*" style="display: none;">
+                <div id="sentence-upload-prompt">
+                  <div class="upload-icon">📝</div>
+                  <h4 style="margin-bottom: 0.5rem; color:#fff;">Drag &amp; Drop Handwritten Sentence or Note</h4>
+                  <p style="font-size: 0.85rem; color:#94a3b8;">Supports full sentences, photos of paper notes, and multi-line paragraphs</p>
+                  <button class="btn btn-secondary btn-sm" id="btn-browse-sentence" style="margin-top: 1rem;" type="button">Browse Computer</button>
+                </div>
+                <img id="sentence-preview-img" class="upload-preview-img" style="display: none;" alt="Uploaded Sentence Preview">
+              </div>
+            </div>
+
+            <!-- Sentence Recognize Action Button -->
+            <div class="studio-actions" style="margin-top: 1rem;">
+              <button class="btn btn-primary btn-predict shimmer-btn" id="btn-recognize-sentence">
+                <span>✨ Recognize Complete Sentence (CRNN)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Digital Text Output Panel -->
+          <div class="glass-card result-card">
+            <div class="result-header">
+              <div>
+                <h3 style="font-size:1.25rem; font-weight:700;">Recognized Digital Text</h3>
+                <p style="font-size:0.85rem; color:#94a3b8;">Deep Learning CRNN (CNN + BiLSTM + CTC) Output</p>
+              </div>
+              <span class="result-badge" id="sentence-status-badge">CRNN Ready</span>
+            </div>
+
+            <!-- Unclear Handwriting Notice -->
+            <div class="unclear-notice-card" id="sentence-unclear-notice" style="display: none;">
+              <div class="unclear-icon">⚠️</div>
+              <div class="unclear-text">
+                <h4>Unable to recognize. Please try again.</h4>
+                <p>The handwriting was unclear, faint, or ambiguous. Please write with clearer strokes or try another sample.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btn-sentence-unclear-retry">🔄 Try Again</button>
+            </div>
+
+            <!-- Sentence Confidence & Latency Badges -->
+            <div class="sentence-meta-strip">
+              <div class="meta-stat-chip">
+                <span class="chip-label">Confidence</span>
+                <span class="chip-val text-gradient" id="sentence-confidence-val">--%</span>
+              </div>
+              <div class="meta-stat-chip">
+                <span class="chip-label">Processing Time</span>
+                <span class="chip-val" id="sentence-latency-val">-- ms</span>
+              </div>
+              <div class="meta-stat-chip">
+                <span class="chip-label">Word Count</span>
+                <span class="chip-val" id="sentence-word-count">0 words</span>
+              </div>
+              <div class="meta-stat-chip">
+                <span class="chip-label">Line Count</span>
+                <span class="chip-val" id="sentence-line-count">0 lines</span>
+              </div>
+            </div>
+
+            <!-- Editable Digital Text Output Box -->
+            <div class="digital-text-box-wrapper">
+              <div class="output-box-header">
+                <span>📄 Editable Digital Text:</span>
+                <span style="font-size:0.75rem; color:#94a3b8;">Click inside to edit or format</span>
+              </div>
+              <textarea id="sentence-output-text" class="sentence-output-textarea" rows="4" placeholder="Recognized sentence text will appear here. You can freely edit, correct, or copy it..."></textarea>
+            </div>
+
+            <!-- Action Toolbar: Copy, Download TXT, Retry, Clear -->
+            <div class="sentence-actions-toolbar">
+              <button class="btn btn-secondary btn-sm" id="btn-copy-sentence" title="Copy digital text to clipboard">
+                <span>📋 Copy Text</span>
+              </button>
+              <button class="btn btn-secondary btn-sm" id="btn-download-txt" title="Download recognized text as .txt document">
+                <span>💾 Download as TXT</span>
+              </button>
+              <button class="btn btn-secondary btn-sm" id="btn-retry-sentence" title="Re-evaluate with adaptive multi-scale filter">
+                <span>🔄 Retry Recognition</span>
+              </button>
+              <button class="btn btn-secondary btn-sm" id="btn-clear-sentence" title="Clear canvas and text output">
+                <span>🧹 Clear All</span>
+              </button>
+            </div>
+
+            <!-- Highlighted Words Chips -->
+            <div class="word-chips-section">
+              <div class="breakdown-title" style="margin-bottom: 0.5rem;">
+                <span>Recognized Word Breakdown &amp; Confidence</span>
+                <span style="color:#94a3b8; font-size:0.75rem;">Word-by-word probabilities</span>
+              </div>
+              <div class="word-chips-container" id="sentence-words-container">
+                <span style="color:#64748b; font-size:0.85rem;">Word tokens will appear here after recognition.</span>
+              </div>
+            </div>
+
+            <!-- Visual Bounding Box Preview Container -->
+            <div class="annotated-preview-card" id="sentence-annotated-card" style="display: none; margin-top: 1rem;">
+              <div class="step-title" style="margin-bottom:0.4rem; color:var(--neon-cyan); font-size:0.8rem; font-weight:700;">
+                <span>🎯 Optical Word Bounding Boxes (AI Layout Analysis)</span>
+              </div>
+              <img id="sentence-annotated-img" class="annotated-preview-img" alt="Annotated Words Preview">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           SINGLE CHARACTER RECOGNITION STUDIO (CNN / LeNet-5)
+           ==================================================================== -->
+      <div id="character-studio-container" class="studio-grid" style="display: none;">
+        <!-- Studio Left: Input Panel -->
+        <div class="glass-card studio-card reveal">
+          <div class="studio-tabs">
+            <button class="studio-tab-btn active" data-tab="draw">
+              <span>✍️ Draw Character</span>
+            </button>
+            <button class="studio-tab-btn" data-tab="upload">
+              <span>📁 Upload Image</span>
+            </button>
+            <button class="studio-tab-btn" data-tab="word">
+              <span>🔤 Word Mode (CRNN)</span>
+            </button>
+          </div>
+
+          <!-- Tab Pane 1: Digital Drawing Canvas -->
+          <div class="tab-pane active" id="tab-draw">
+            <div class="canvas-wrapper">
+              <canvas id="paint-canvas"></canvas>
+              <div class="canvas-hint" id="canvas-hint">Draw any character (0-9 or A-Z) here</div>
+              <div class="scanning-overlay" id="scanning-overlay"></div>
+            </div>
+
+            <!-- Canvas Toolbar -->
+            <div class="canvas-toolbar">
+              <div class="tool-group">
+                <button class="tool-btn active" data-tool="brush" title="Pen Brush">✏️</button>
+                <button class="tool-btn" data-tool="eraser" title="Eraser">🧹</button>
+                <button class="tool-btn" id="undo-btn" title="Undo Stroke">↩️</button>
+                <button class="tool-btn" id="clear-btn" title="Clear Canvas">🗑️</button>
+              </div>
+
+              <div class="brush-slider-box">
+                <span>Size:</span>
+                <input type="range" id="brush-slider" min="10" max="40" value="22">
+                <span id="brush-size-val">22px</span>
+              </div>
+            </div>
+
+            <!-- Quick Character Stamps -->
+            <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.5rem;">Quick Test Samples:</div>
+            <div class="sample-stamps">
+              <button class="stamp-btn" data-char="A">A</button>
+              <button class="stamp-btn" data-char="B">B</button>
+              <button class="stamp-btn" data-char="C">C</button>
+              <button class="stamp-btn" data-char="G">G</button>
+              <button class="stamp-btn" data-char="R">R</button>
+              <button class="stamp-btn" data-char="3">3</button>
+              <button class="stamp-btn" data-char="7">7</button>
+              <button class="stamp-btn" data-char="8">8</button>
+              <button class="stamp-btn" data-char="9">9</button>
+              <button class="stamp-btn" data-char="0">0</button>
+            </div>
+          </div>
+
+          <!-- Tab Pane 2: File Upload -->
+          <div class="tab-pane" id="tab-upload">
+            <div class="upload-dropzone" id="upload-dropzone">
+              <input type="file" id="file-input" accept="image/*" style="display: none;">
+              <div id="upload-prompt">
+                <div class="upload-icon">☁️</div>
+                <h4 style="margin-bottom: 0.5rem; color:#fff;">Drag & Drop Handwritten Image</h4>
+                <p style="font-size: 0.85rem; color:#94a3b8;">Supports PNG, JPG, JPEG, WebP</p>
+                <button class="btn btn-secondary btn-sm" style="margin-top: 1rem;" type="button">Browse Computer</button>
+              </div>
+              <img id="upload-preview-img" class="upload-preview-img" style="display: none;" alt="Uploaded Preview">
+            </div>
+          </div>
+
+          <!-- Tab Pane 3: Word / Sentence CRNN Mode -->
+          <div class="tab-pane" id="tab-word">
+            <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 14px; padding: 1rem; margin-bottom: 1.25rem;">
+              <div style="font-weight: 700; color: var(--neon-cyan); margin-bottom: 0.25rem;">CRNN Sequence Transcription</div>
+              <p style="font-size: 0.85rem; color: #cbd5e1;">Draw a short multi-character word (e.g. "AI", "CAT", "2026") across the canvas with spaces between letters. The system will segment and transcribe each character sequentially.</p>
+            </div>
+          </div>
+
+          <!-- Model Selection Row -->
+          <div class="model-select-row">
+            <div class="model-select-label">
+              <span>🧠 Select Model:</span>
+            </div>
+            <select class="custom-select" id="model-select">
+              <option value="cnn" selected>CNN – Convolutional Neural Network (Primary)</option>
+              <option value="lenet5">LeNet-5 – Yann LeCun Classic</option>
+              <option value="ann">ANN – Multi-Layer Perceptron</option>
+              <option value="svm">SVM – Support Vector Machine</option>
+              <option value="knn">KNN – K-Nearest Neighbors</option>
+            </select>
+          </div>
+
+          <!-- Predict Action Button -->
+          <div class="studio-actions">
+            <button class="btn btn-primary btn-predict shimmer-btn" id="predict-btn">
+              <span>✨ Predict Character</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Studio Right: Result Card -->
+        <div class="glass-card result-card reveal">
+          <div class="result-header">
+            <div>
+              <h3 style="font-size:1.25rem; font-weight:700;">Recognition Result</h3>
+              <p style="font-size:0.85rem; color:#94a3b8;">Deep Learning Prediction & Probabilities</p>
+            </div>
+            <span class="result-badge" id="result-status-badge">Model Ready</span>
+          </div>
+
+          <!-- Unclear Handwriting Notice (Requirement 10) -->
+          <div class="unclear-notice-card" id="unclear-notice" style="display: none;">
+            <div class="unclear-icon">⚠️</div>
+            <div class="unclear-text">
+              <h4>Unable to recognize. Please try again.</h4>
+              <p>The character was unclear, ambiguous, or faint. Please draw with bolder, clearer strokes or try another model.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-unclear-retry">🔄 Try Again</button>
+          </div>
+
+          <!-- Single Character Hero Display -->
+          <div class="hero-char-display" id="hero-char-display">
+            <div class="hero-char-box">
+              <span id="hero-char-text">?</span>
+            </div>
+            <div class="hero-meta">
+              <span class="meta-title">Confidence Score</span>
+              <span class="meta-confidence" id="hero-confidence">0.0%</span>
+              <div class="meta-tags">
+                <span class="meta-pill" id="hero-model-tag">CNN</span>
+                <span class="meta-pill" id="hero-latency">0.0 ms</span>
+                <span class="meta-pill" id="hero-accuracy-tag">Accuracy: 99.4%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result Actions Row (Requirement 8: Clear Button & Retry Option) -->
+          <div class="result-actions-row" id="result-actions-row">
+            <button class="btn btn-secondary btn-sm" id="retry-btn" title="Re-evaluate with adaptive multi-scale filter">
+              <span>🔄 Retry Prediction</span>
+            </button>
+            <button class="btn btn-secondary btn-sm" id="clear-result-btn" title="Clear canvas to redraw">
+              <span>🧹 Clear Canvas</span>
+            </button>
+          </div>
+
+          <!-- Prediction Correction Feature (Requirement 8) -->
+          <div class="prediction-correction-box" id="correction-box">
+            <div class="correction-header">
+              <span>✏️ Incorrect prediction? Correct it:</span>
+            </div>
+            <div class="correction-controls">
+              <select id="correction-select" class="custom-select">
+                <option value="">Select Actual...</option>
+                <optgroup label="Digits">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </optgroup>
+                <optgroup label="Letters A-Z">
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                  <option value="E">E</option>
+                  <option value="F">F</option>
+                  <option value="G">G</option>
+                  <option value="H">H</option>
+                  <option value="I">I</option>
+                  <option value="J">J</option>
+                  <option value="K">K</option>
+                  <option value="L">L</option>
+                  <option value="M">M</option>
+                  <option value="N">N</option>
+                  <option value="O">O</option>
+                  <option value="P">P</option>
+                  <option value="Q">Q</option>
+                  <option value="R">R</option>
+                  <option value="S">S</option>
+                  <option value="T">T</option>
+                  <option value="U">U</option>
+                  <option value="V">V</option>
+                  <option value="W">W</option>
+                  <option value="X">X</option>
+                  <option value="Y">Y</option>
+                  <option value="Z">Z</option>
+                </optgroup>
+              </select>
+              <button class="btn btn-primary btn-sm" id="btn-submit-correction">Save Correction</button>
+            </div>
+            <div id="correction-feedback" class="correction-feedback" style="display: none;"></div>
+          </div>
+
+          <!-- CRNN Word Result Box (Visible in Word Mode) -->
+          <div class="crnn-result-box" id="crnn-result-box" style="display: none;">
+            <div style="font-size:0.8rem; color:var(--neon-cyan); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.4rem;">Decoded Sequence</div>
+            <div class="crnn-word-text" id="crnn-word-text">---</div>
+            <div class="crnn-chars-strip" id="crnn-chars-strip"></div>
+          </div>
+
+          <!-- Top-5 Probability Breakdown -->
+          <div class="confidence-breakdown">
+            <div class="breakdown-title">
+              <span>Candidate Probabilities</span>
+              <span style="color:#94a3b8; font-size:0.8rem;">Top 5 Rankings</span>
+            </div>
+            <div id="candidates-container">
+              <div style="color:#64748b; font-size:0.85rem; text-align:center; padding:1rem;">Draw or upload a character and click Predict to inspect probabilities.</div>
+            </div>
+          </div>
+
+          <!-- Conv2D Intermediate Feature Maps Drawer -->
+          <div class="feature-maps-drawer" id="fmaps-drawer" style="display: none;">
+            <div class="drawer-header">
+              <span>🔬 Conv2D Layer 1 Feature Maps</span>
+              <span style="font-size:0.75rem;">Active Filters</span>
+            </div>
+            <div class="fmaps-grid" id="fmaps-container"></div>
+          </div>
+
+          <!-- 3-Stage Preprocessing Pipeline Preview -->
+          <div class="pipeline-previews">
+            <div class="preview-step-card">
+              <div class="step-title">1. Original</div>
+              <img id="preview-orig" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111'/></svg>" alt="Original Input">
+            </div>
+            <div class="preview-step-card">
+              <div class="step-title">2. Thresholded</div>
+              <img id="preview-thresh" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111'/></svg>" alt="Thresholded">
+            </div>
+            <div class="preview-step-card">
+              <div class="step-title">3. Centered 28x28</div>
+              <img id="preview-centered" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111'/></svg>" alt="Centered 28x28">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       3. AI MODELS SECTION
+       ======================================================================== -->
+  <section class="models-section" id="models">
+    <div class="container">
+      <div class="text-center reveal">
+        <div class="section-badge">
+          <span class="dot"></span>
+          <span>Architectures</span>
+        </div>
+        <h2 class="section-title">Deep Learning & <span class="text-gradient">ML Models</span></h2>
+        <p class="section-subtitle">Comparative suite of deep convolutional networks, classic OCR benchmarks, and statistical pattern recognition algorithms.</p>
+      </div>
+
+      <div class="models-grid">
+        <!-- 1. CNN (Primary Model) -->
+        <div class="glass-card model-card featured reveal">
+          <span class="model-badge-top">Primary Model</span>
+          <div class="model-icon">🧬</div>
+          <h3 class="model-name">CNN</h3>
+          <div style="font-size:0.85rem; color:var(--neon-purple); font-weight:700; margin-bottom:0.75rem;">Convolutional Neural Network</div>
+          <p class="model-desc">Multi-stage 2D convolutions with automated spatial feature hierarchy, max-pooling downsampling, and dense softmax classification.</p>
+          <div class="model-specs">
+            <div class="spec-item">
+              <span class="spec-label">Accuracy</span>
+              <span class="spec-value" style="color:var(--neon-emerald);">99.43%</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Params</span>
+              <span class="spec-value">214,884</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Latency</span>
+              <span class="spec-value">4.2 ms</span>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm btn-learn-more" data-model="cnn">Learn More</button>
+        </div>
+
+        <!-- 2. LeNet-5 -->
+        <div class="glass-card model-card reveal">
+          <div class="model-icon">🏛️</div>
+          <h3 class="model-name">LeNet-5</h3>
+          <div style="font-size:0.85rem; color:var(--neon-cyan); font-weight:700; margin-bottom:0.75rem;">Handwritten Digit Recognition</div>
+          <p class="model-desc">The historic 1998 Yann LeCun architecture featuring 5x5 convolution kernels and subsampling layers engineered for digit verification.</p>
+          <div class="model-specs">
+            <div class="spec-item">
+              <span class="spec-label">Accuracy</span>
+              <span class="spec-value">97.16%</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Params</span>
+              <span class="spec-value">60,456</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Latency</span>
+              <span class="spec-value">3.1 ms</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm btn-learn-more" data-model="lenet5">Learn More</button>
+        </div>
+
+        <!-- 3. CRNN -->
+        <div class="glass-card model-card reveal">
+          <div class="model-icon">🔤</div>
+          <h3 class="model-name">CRNN</h3>
+          <div style="font-size:0.85rem; color:var(--neon-pink); font-weight:700; margin-bottom:0.75rem;">Word & Sentence Recognition</div>
+          <p class="model-desc">Convolutional Recurrent Neural Network with connected component segmentation for full word transcription and sequential character decoding.</p>
+          <div class="model-specs">
+            <div class="spec-item">
+              <span class="spec-label">Accuracy</span>
+              <span class="spec-value">92.40%</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Type</span>
+              <span class="spec-value">Sequence</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Latency</span>
+              <span class="spec-value">12.8 ms</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm btn-learn-more" data-model="crnn">Learn More</button>
+        </div>
+
+        <!-- 4. ANN -->
+        <div class="glass-card model-card reveal">
+          <div class="model-icon">🕸️</div>
+          <h3 class="model-name">ANN</h3>
+          <div style="font-size:0.85rem; color:#cbd5e1; font-weight:700; margin-bottom:0.75rem;">Artificial Neural Network</div>
+          <p class="model-desc">Fully-connected Multi-Layer Perceptron (MLP) with 256 and 128 hidden neurons utilizing ReLU activations on 784 flattened pixel vectors.</p>
+          <div class="model-specs">
+            <div class="spec-item">
+              <span class="spec-label">Accuracy</span>
+              <span class="spec-value">98.64%</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Params</span>
+              <span class="spec-value">238,628</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Latency</span>
+              <span class="spec-value">1.8 ms</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm btn-learn-more" data-model="ann">Learn More</button>
+        </div>
+
+        <!-- 5. SVM -->
+        <div class="glass-card model-card reveal">
+          <div class="model-icon">📐</div>
+          <h3 class="model-name">SVM</h3>
+          <div style="font-size:0.85rem; color:#cbd5e1; font-weight:700; margin-bottom:0.75rem;">Support Vector Machine</div>
+          <p class="model-desc">Optimal margin hyperplanes in kernelized feature space using non-linear Radial Basis Function (RBF) kernels and Platt scaling probabilities.</p>
+          <div class="model-specs">
+            <div class="spec-item">
+              <span class="spec-label">Accuracy</span>
+              <span class="spec-value">98.98%</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Kernel</span>
+              <span class="spec-value">RBF</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Latency</span>
+              <span class="spec-value">7.6 ms</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm btn-learn-more" data-model="svm">Learn More</button>
+        </div>
+
+        <!-- 6. KNN -->
+        <div class="glass-card model-card reveal">
+          <div class="model-icon">👥</div>
+          <h3 class="model-name">KNN</h3>
+          <div style="font-size:0.85rem; color:#cbd5e1; font-weight:700; margin-bottom:0.75rem;">K-Nearest Neighbors</div>
+          <p class="model-desc">Non-parametric instance-based classification by distance-weighted voting over the 5 nearest neighbors in 784-dimensional Euclidean space.</p>
+          <div class="model-specs">
+            <div class="spec-item">
+              <span class="spec-label">Accuracy</span>
+              <span class="spec-value">97.73%</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Neighbors</span>
+              <span class="spec-value">K=5</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Latency</span>
+              <span class="spec-value">5.4 ms</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm btn-learn-more" data-model="knn">Learn More</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4. DATASET SECTION
+       ======================================================================== -->
+  <section class="dataset-section" id="datasets">
+    <div class="container">
+      <div class="text-center reveal">
+        <div class="section-badge">
+          <span class="dot"></span>
+          <span>Benchmark Data</span>
+        </div>
+        <h2 class="section-title">Datasets & <span class="text-gradient">Image Gallery</span></h2>
+        <p class="section-subtitle">Trained and benchmarked on standardized benchmark corpora for handwritten digits and alphanumeric characters.</p>
+      </div>
+
+      <!-- Animated Counters -->
+      <div class="dataset-stats-grid reveal">
+        <div class="glass-card dataset-stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-counter" id="stat-total-samples">70,000+</div>
+          <div style="font-size:0.9rem; color:#94a3b8;">MNIST Digits</div>
+        </div>
+        <div class="glass-card dataset-stat-card">
+          <div class="stat-icon">🔠</div>
+          <div class="stat-counter">814,255</div>
+          <div style="font-size:0.9rem; color:#94a3b8;">EMNIST Characters</div>
+        </div>
+        <div class="glass-card dataset-stat-card">
+          <div class="stat-icon">📏</div>
+          <div class="stat-counter">28 × 28</div>
+          <div style="font-size:0.9rem; color:#94a3b8;">Normalized Resolution</div>
+        </div>
+        <div class="glass-card dataset-stat-card">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-counter">62</div>
+          <div style="font-size:0.9rem; color:#94a3b8;">Alphanumeric Classes</div>
+        </div>
+      </div>
+
+      <!-- Dual Dataset Comparison Cards -->
+      <div class="dataset-dual-grid">
+        <!-- MNIST Card -->
+        <div class="glass-card dataset-box reveal">
+          <div class="dataset-header">
+            <div class="dataset-header-icon">🔢</div>
+            <div>
+              <h3 style="font-size:1.4rem; font-weight:700;">MNIST Dataset</h3>
+              <p style="font-size:0.85rem; color:#94a3b8;">Handwritten Digits (0 to 9)</p>
+            </div>
+          </div>
+          <p style="color:#cbd5e1; font-size:0.9rem; margin-bottom:1rem;">
+            The golden standard in computer vision research created by Yann LeCun, Corinna Cortes, and Christopher Burges. 60,000 training images and 10,000 testing images of standardized, centered handwritten digits.
+          </p>
+
+          <div style="font-size:0.8rem; color:#94a3b8; font-weight:600;">Interactive Samples (Click to load in Studio):</div>
+          <div class="dataset-gallery">
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('0')">0</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('1')">1</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('2')">2</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('3')">3</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('4')">4</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('5')">5</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('6')">6</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('7')">7</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('8')">8</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('9')">9</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('5')">5</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('8')">8</div>
+          </div>
+        </div>
+
+        <!-- EMNIST Card -->
+        <div class="glass-card dataset-box reveal">
+          <div class="dataset-header">
+            <div class="dataset-header-icon" style="background:rgba(6, 182, 212, 0.2); color:var(--neon-cyan);">🔤</div>
+            <div>
+              <h3 style="font-size:1.4rem; font-weight:700;">EMNIST Dataset</h3>
+              <p style="font-size:0.85rem; color:#94a3b8;">Extended MNIST Letters & Digits</p>
+            </div>
+          </div>
+          <p style="color:#cbd5e1; font-size:0.9rem; margin-bottom:1rem;">
+            Extended MNIST derives directly from NIST Special Database 19, encompassing full uppercase and lowercase Latin characters (A-Z, a-z) plus digits into a unified 28x28 pixel format.
+          </p>
+
+          <div style="font-size:0.8rem; color:#94a3b8; font-weight:600;">Interactive Samples (Click to load in Studio):</div>
+          <div class="dataset-gallery">
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('A')">A</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('B')">B</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('C')">C</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('D')">D</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('E')">E</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('F')">F</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('G')">G</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('H')">H</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('R')">R</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('S')">S</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('X')">X</div>
+            <div class="sample-tile" onclick="window.drawingCanvas.stampCharacter('Z')">Z</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       5. HOW IT WORKS WORKFLOW
+       ======================================================================== -->
+  <section class="workflow-section" id="how-it-works">
+    <div class="container">
+      <div class="text-center reveal">
+        <div class="section-badge">
+          <span class="dot"></span>
+          <span>Pipeline Architecture</span>
+        </div>
+        <h2 class="section-title">How It <span class="text-gradient">Works</span></h2>
+        <p class="section-subtitle">From raw handwritten stroke pixels to high-confidence classified characters via a multi-stage deep learning pipeline.</p>
+      </div>
+
+      <div class="workflow-steps-track">
+        <!-- Step 1 -->
+        <div class="glass-card step-card reveal">
+          <div class="step-number">1</div>
+          <div class="step-icon">✏️</div>
+          <h4>Input Image</h4>
+          <p>Handwritten drawing from digital canvas or photo upload from paper.</p>
+          <div class="step-arrow">➔</div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="glass-card step-card reveal">
+          <div class="step-number">2</div>
+          <div class="step-icon">⚙️</div>
+          <h4>Preprocessing</h4>
+          <p>Grayscale, inversion, noise reduction, and center-of-mass centering.</p>
+          <div class="step-arrow">➔</div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="glass-card step-card reveal">
+          <div class="step-number">3</div>
+          <div class="step-icon">🔍</div>
+          <h4>Feature Extraction</h4>
+          <p>Edge detection, stroke orientations, loops, and spatial gradients.</p>
+          <div class="step-arrow">➔</div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="glass-card step-card reveal">
+          <div class="step-number">4</div>
+          <div class="step-icon">🧬</div>
+          <h4>CNN Model</h4>
+          <p>Conv2D convolution filters, ReLU activations, and max-pooling compression.</p>
+          <div class="step-arrow">➔</div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="glass-card step-card reveal">
+          <div class="step-number">5</div>
+          <div class="step-icon">📊</div>
+          <h4>Prediction</h4>
+          <p>Dense layers with Softmax probability distribution over 36 classes.</p>
+          <div class="step-arrow">➔</div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="glass-card step-card reveal">
+          <div class="step-number">6</div>
+          <div class="step-icon">🎉</div>
+          <h4>Final Output</h4>
+          <p>Digitally decoded character, confidence score, and top candidate ranking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       6. RESULTS DASHBOARD
+       ======================================================================== -->
+  <section class="dashboard-section" id="dashboard">
+    <div class="container">
+      <div class="text-center reveal">
+        <div class="section-badge">
+          <span class="dot"></span>
+          <span>Performance & Analytics</span>
+        </div>
+        <h2 class="section-title">Results <span class="text-gradient">Dashboard</span></h2>
+        <p class="section-subtitle">Real-time model accuracy metrics, loss curves, training convergence, and interactive recognition history.</p>
+      </div>
+
+      <!-- Live Metric Stats -->
+      <div class="dashboard-stats-grid reveal">
+        <div class="glass-card dash-stat-box">
+          <div class="dash-stat-icon">🎯</div>
+          <div>
+            <div class="dash-stat-val" id="stat-model-acc">99.43%</div>
+            <div class="dash-stat-label">Model Validation Accuracy</div>
+          </div>
+        </div>
+        <div class="glass-card dash-stat-box">
+          <div class="dash-stat-icon" style="background:rgba(6, 182, 212, 0.15); color:var(--neon-cyan);">⚡</div>
+          <div>
+            <div class="dash-stat-val">100.0%</div>
+            <div class="dash-stat-label">Training Convergence</div>
+          </div>
+        </div>
+        <div class="glass-card dash-stat-box">
+          <div class="dash-stat-icon" style="background:rgba(236, 72, 153, 0.15); color:var(--neon-pink);">⏱️</div>
+          <div>
+            <div class="dash-stat-val">4.2 ms</div>
+            <div class="dash-stat-label">Avg CNN Latency</div>
+          </div>
+        </div>
+        <div class="glass-card dash-stat-box">
+          <div class="dash-stat-icon" style="background:rgba(16, 185, 129, 0.15); color:var(--neon-emerald);">📦</div>
+          <div>
+            <div class="dash-stat-val">5 Models</div>
+            <div class="dash-stat-label">Suite Deployed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Training Curves Charts (Accuracy & Loss) -->
+      <div class="charts-dual-grid reveal">
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <div>
+              <h4 style="font-size:1.15rem; font-weight:700;">CNN Accuracy Trajectory</h4>
+              <p style="font-size:0.8rem; color:#94a3b8;">Train vs Validation over 12 Epochs</p>
+            </div>
+            <span class="meta-pill" style="color:var(--neon-emerald);">99.43% Peak</span>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="accuracy-chart"></canvas>
+          </div>
+        </div>
+
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <div>
+              <h4 style="font-size:1.15rem; font-weight:700;">Loss Convergence</h4>
+              <p style="font-size:0.8rem; color:#94a3b8;">Cross-Entropy Loss vs Epochs</p>
+            </div>
+            <span class="meta-pill" style="color:var(--neon-cyan);">0.0202 Loss</span>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="loss-chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Multi-Model Accuracy Benchmark Bar Chart -->
+      <div class="glass-card chart-card reveal" style="margin-bottom: 2.5rem;">
+        <div class="chart-header">
+          <div>
+            <h4 style="font-size:1.15rem; font-weight:700;">Multi-Model Benchmark Comparison</h4>
+            <p style="font-size:0.8rem; color:#94a3b8;">Accuracy Across All 5 Implemented Classifiers</p>
+          </div>
+          <span class="meta-pill">Validation Benchmark</span>
+        </div>
+        <div class="chart-wrapper" style="height: 240px;">
+          <canvas id="benchmark-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Live Recognition History -->
+      <div class="glass-card history-card reveal">
+        <div class="history-header">
+          <div>
+            <h4 style="font-size:1.2rem; font-weight:700;">Session Recognition History</h4>
+            <p style="font-size:0.85rem; color:#94a3b8;">Log of all drawings and predictions recognized in this session</p>
+          </div>
+          <div style="display:flex; gap:0.5rem;">
+            <button class="btn btn-secondary btn-sm" id="export-history-btn">📥 Export JSON</button>
+            <button class="btn btn-secondary btn-sm" id="clear-history-btn">🗑️ Clear History</button>
+          </div>
+        </div>
+
+        <div class="history-table-wrapper">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Preview</th>
+                <th>Predicted</th>
+                <th>Confidence</th>
+                <th>Model</th>
+                <th>Latency</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody">
+              <tr>
+                <td colspan="6" style="text-align:center; color:#64748b; padding:2rem;">
+                  No characters recognized yet. Draw or upload to begin!
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       MODAL: LEARN MORE ARCHITECTURES
+       ======================================================================== -->
+  <div class="modal-overlay" id="model-modal">
+    <div class="glass-card modal-window">
+      <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+      <div class="section-badge" id="modal-badge" style="margin-bottom:0.75rem;">Model Architecture</div>
+      <h3 style="font-size:1.6rem; font-weight:800; margin-bottom:1rem;" id="modal-title">Model Details</h3>
+      <div id="modal-body" style="color:#cbd5e1; font-size:0.95rem; line-height:1.7;"></div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="logo-brand" style="margin-bottom: 1rem;">
+            <div class="logo-icon">✨</div>
+            <span>Neural<span class="text-gradient">Vision</span> AI</span>
+          </div>
+          <p style="font-size: 0.9rem; color: #94a3b8; max-width: 320px;">
+            A modern, colourful, fully animated web application for Handwritten Character Recognition using Python, CNN, and Deep Learning.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Technologies</h5>
+          <ul>
+            <li><a href="#models">Python & NumPy</a></li>
+            <li><a href="#models">TensorFlow & Keras</a></li>
+            <li><a href="#studio">Flask REST API</a></li>
+            <li><a href="#how-it-works">SciPy & Pillow</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Navigation</h5>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#studio">Recognition Studio</a></li>
+            <li><a href="#models">AI Models</a></li>
+            <li><a href="#dashboard">Results Dashboard</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Datasets</h5>
+          <ul>
+            <li><a href="#datasets">MNIST Digits (0-9)</a></li>
+            <li><a href="#datasets">EMNIST Letters (A-Z)</a></li>
+            <li><a href="#how-it-works">Center of Mass Normalization</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 AI Handwritten Character Recognition System. Designed with deep learning & modern animated UI.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/particles.js"></script>
+  <script src="js/brain_animation.js"></script>
+  <script src="js/canvas.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
