@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🧠 AI Handwritten Character & Sentence Recognition — Fullstack Application
 ### Decoupled Frontend & Backend Architecture using Python, Flask, CNN, CRNN & Modern Web Stack
 
@@ -162,3 +163,6 @@ python test_backend.py
 All endpoints include **CORS headers** (`Access-Control-Allow-Origin: *`) allowing any frontend port or local browser to connect seamlessly.
 
 All endpoints include **CORS headers** (`Access-Control-Allow-Origin: *`) allowing any frontend port to connect seamlessly.
+=======
+# Handwritten_Character_Recognition
+>>>>>>> ac3c68b613d3abe146b3630641cf88bf9108c11d
